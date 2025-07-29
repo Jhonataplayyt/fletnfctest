@@ -1,11 +1,25 @@
-import 'package:nfc_manager/nfc_manager.dart';
 import 'package:flet/flet.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
+import 'flet_nfc_ext.dart';
 
-Widget createControl(Control control, Control? parent) {
-  switch (control.type) {
-    case "nfc_reader":
-      return _NfcReaderWidget(parent: parent, control: control);
-    // outros cases…
+Control createControl(ControlArgs args) {
+  switch (args.control.type) {
+    case 'flet_nfc_ext':
+      return FletNfcExtControl(
+        parent: args.parentControl,
+        control: args.control,
+      );
+    default:
+      return UnimplementedControl();
   }
 }
+
+void ensureInitialized() {
+  // qualquer inicialização global
+}
+
+final extension = Extension(
+  id: 'flet_nfc_ext',
+  createControl: createControl,
+  ensureInitialized: ensureInitialized,
+);

@@ -1,11 +1,13 @@
-import 'package:flet/flet.dart';
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_nfc_kit/flutter_nfc_kit.dart';
+import 'package:flet/flet.dart';
 
-class FletNfcControl extends StatelessWidget {
-  final Control? parent;
+class FletNfcExtControl extends StatelessWidget {
   final Control control;
+  final Control? parent;
 
-  const FletNfcControl({
+  const FletNfcExtControl({
     super.key,
     required this.parent,
     required this.control,
@@ -13,10 +15,24 @@ class FletNfcControl extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String text = control.attrString("value", "")!;
-    Widget myControl = Text(text);
-
-
-    return constrainedControl(context, myControl, parent, control);
+    return GestureDetector(
+      onTap: () async {
+        // exemplo simples: lê ID da tag
+        NFCTag tag = await FlutterNfcKit.poll();
+        await FlutterNfcKit.finish();
+        // envia de volta para Python
+        control.backend.triggerControlEvent(
+          control.id,
+          jsonEncode({'id': tag.id}),
+        );
+      },
+      child: Container(
+        width: control.attrDouble('width'),
+        height: control.attrDouble('height'),
+        color: Colors.grey.shade200,
+        alignment: Alignment.center,
+        child: Text('Toque para ler NFC'),
+      ),
+    );
   }
 }
