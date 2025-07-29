@@ -1,0 +1,43 @@
+apply plugin: 'com.android.application'
+
+android {
+    namespace 'com.yourcompany.yourapp' // troque pelo seu pacote real
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.yourcompany.yourapp"  // pacote
+        minSdk 21
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+
+        // Para suporte a Java 8+
+        compileOptions {
+            sourceCompatibility JavaVersion.VERSION_17
+            targetCompatibility JavaVersion.VERSION_17
+        }
+
+        // Para habilitar Kotlin se usar
+        // kotlinOptions {
+        //     jvmTarget = "17"
+        // }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.9.0'
+
+    // Dependência para NFC (Android já possui embutido, só garantir compatibilidade)
+    // Nenhuma dependência extra necessária para NFC básico
+
+    // Se usar Kotlin:
+    // implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}

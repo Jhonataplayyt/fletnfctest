@@ -1,0 +1,23 @@
+[project]
+name = "leitor-nfc"
+version = "0.1.0"
+description = "App de leitura NFC com Flet + PyJNIus"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = ["Seu Nome <seu.email@exemplo.com>"]
+
+[project.dependencies]
+flet = "^0.27.4"
+pyjnius = "*"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.flet]
+org = "com.seunome.app"          # Identificador do pacote Android
+product = "Leitor NFC"           # Nome do app no launcher
+
+[tool.flet.android]
+main_activity_host_class_name = "org.kivy.android.PythonActivity"
+permissions = ["android.permission.NFC"]

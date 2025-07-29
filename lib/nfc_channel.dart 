@@ -1,0 +1,17 @@
+import 'package:flutter/services.dart';
+
+class NfcChannel {
+  static const _channel = MethodChannel('flet_nfc_channel');
+
+  Future<Map<String, String>?> scanNfc() async {
+    try {
+      final result = await _channel.invokeMethod('scanNfc');
+      if (result is Map) {
+        return Map<String, String>.from(result);
+      }
+    } on PlatformException catch (e) {
+      print('NFC error: $e');
+    }
+    return null;
+  }
+}
