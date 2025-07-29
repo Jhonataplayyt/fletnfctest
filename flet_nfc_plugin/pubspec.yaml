@@ -1,0 +1,9 @@
+name: flet_nfc
+description: Plugin Flutter para leitura de NFC em Android, integrado a Flet.
+version: 0.0.1
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: com.example.flet_nfc
+        pluginClass: FletNfcPlugin
