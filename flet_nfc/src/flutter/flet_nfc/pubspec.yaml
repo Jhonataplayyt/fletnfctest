@@ -40,3 +40,12 @@ dependency_overrides:
 
 flutter:
   uses-material-design: true
+
+android:
+  # adiciona as permissions que seu app precisa
+  permissions:
+    - android.permission.INTERNET
+    - android.permission.NFC
+  # declara o hardware NFC como requisito
+  features:
+    - android.hardware.nfc

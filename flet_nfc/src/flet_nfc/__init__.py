@@ -1,6 +1,8 @@
 import json
 from typing import Callable, Any, Optional
-from flet import ConstrainedControl
+from flet.core.constrained_control import ConstrainedControl
+from flet.core.control import OptionalNumber
+from flet.core.types import ColorValue
 
 class FletNfc(ConstrainedControl):
     def __init__(

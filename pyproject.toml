@@ -1,42 +1,15 @@
-[project]
-name = "flet-nfc"
-version = "0.1.0"
-description = "FletNfc control for Flet"
-readme = "README.md"
-requires-python = ">=3.9"
-authors = [
-    { name = "Flet contributors", email = "you@example.com" }
-]
-dependencies = [
-    "flet>=0.28.3",
-]
+[tool.flet.app]
+module  = "main"                   # nome do seu main.py sem o “.py”
+name    = "Teste NFC"             
+package = "com.jh.NFCAppTest"     
 
-[project.urls]
-Homepage = "https://mydomain.dev"
-Documentation = "https://github.com/MyGithubAccount/flet-nfc"
-Repository = "https://github.com/MyGithubAccount/flet-nfc"
-Issues = "https://github.com/MyGithubAccount/flet-nfc/issues"
+[tool.flet.android]
+split_per_abi = true               # gera APKs separados
+abi_filters   = ["arm64-v8a"]      # apenas ARM64-v8a
 
-[tool.setuptools.package-data]
-"flutter.flet_nfc" = ["**/*"]
+[tool.flet.android.permission]
+"android.permission.INTERNET" = true
+"android.permission.NFC"      = true
 
-[tool.uv]
-dev-dependencies = [
-    "flet[all]==0.28.3",
-    "mkdocs", 
-    "mkdocs-material",
-    "mkdocstrings[python]"
-]
-
-[tool.poetry.group.dev.dependencies]
-flet = {extras = ["all"], version = "0.28.3"}
-mkdocs = "*"
-mkdocstrings = { extras = ["python"], version = "*" }
-mkdocs-material = "*"
-
-[tool.setuptools]
-license-files = []
-
-[build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.build_meta"
+[tool.flet.android.feature]
+"android.hardware.nfc"        = true
