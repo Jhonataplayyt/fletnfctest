@@ -1,31 +1,14 @@
-import flet as ft
+import flet
+from flet_nfc import NfcReader
 
-def main(page: ft.Page):
-    # Inicia a sessão NFC
-    page.pubsub.publish("plugin:flet_nfc", {"method": "startSession"})
-
-    # Manipulador de evento do plugin
-    # Não precisamos importar PluginEvent — basta receber 'e'
-    def on_nfc(e):
-        # 'e.data' já contém o payload do plugin
-        tag_id = e.data.get("event")
-        print("Tag lida:", tag_id)
-        page.controls.append(ft.Text(f"Tag NFC: {tag_id}"))
+def main(page: flet.Page):
+    def on_tag(e):
+        page.snack_bar = flet.SnackBar(flet.Text(f"Tag lida: {e.data['id']}"))
+        page.snack_bar.open = True
         page.update()
 
-    # Registra o handler
-    page.plugin_event = on_nfc
+    page.add(NfcReader(on_tag=on_tag))
+    page.update()
 
-    # Botão para encerrar a sessão NFC
-    page.add(
-        ft.ElevatedButton(
-            "Parar NFC",
-            on_click=lambda _: page.pubsub.publish("plugin:flet_nfc", {"method": "stopSession"})
-        )
-    )
-
-ft.app(
-    target=main,
-    assets_dir="assets",
-)
-
+if __name__ == "__main__":
+    flet.app(target=main)
