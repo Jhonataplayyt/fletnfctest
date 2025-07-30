@@ -1,0 +1,7 @@
+site_name: Nfcflet
+
+theme:
+  name: "material"
+
+plugins:
+  - mkdocstrings

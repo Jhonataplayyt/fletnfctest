@@ -1,3 +1,16 @@
+Metadata-Version: 2.4
+Name: nfcflet
+Version: 0.1.0
+Summary: Nfcflet control for Flet
+Author-email: Flet contributors <you@example.com>
+Project-URL: Homepage, https://mydomain.dev
+Project-URL: Documentation, https://github.com/MyGithubAccount/nfcflet
+Project-URL: Repository, https://github.com/MyGithubAccount/nfcflet
+Project-URL: Issues, https://github.com/MyGithubAccount/nfcflet/issues
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+Requires-Dist: flet>=0.28.3
+
 # nfcflet
 Nfcflet control for Flet
 

@@ -1,0 +1,53 @@
+[project]
+name = "fletnfc-app"
+version = "1.0.0"
+description = "teste com nfc"
+requires-python = ">=3.9"
+authors = [
+  { name = "Jhonata", email = "jhonatacarneirorios@gmail.com" }
+]
+dependencies = [
+  "nfcflet",
+  "flet>=0.28.3",
+]
+
+[tool.flet]
+# pacote org + nome formam o bundle ID padrão (Android/iOS)
+org     = "com.jh.NFCTest"
+# nome do app mostrado no celular
+product = "NFCTest"
+
+[tool.flet.app]
+path = "src"
+
+[tool.flet.dev_packages]
+nfcflet = "..\\.."
+
+[tool.flet.android]
+# bundle ID Android/iOS
+bundle_id     = "com.jh.NFCTest"
+# gera APKs separados por ABI
+split_per_abi = true
+
+[tool.flet.android.permission]
+"android.permission.INTERNET" = true
+"android.permission.NFC"      = true
+
+[tool.flet.android.feature]
+"android.hardware.nfc" = true
+
+[tool.flet.android.manifest_application]
+# label que vai para AndroidManifest.xml como android:label
+label = "NFCTest"
+
+[tool.uv]
+dev-dependencies = [
+  "flet[all]==0.28.3",
+]
+
+[tool.uv.sources]
+nfcflet = { path = "..\\..\\", editable = true }
+
+[tool.poetry.group.dev.dependencies]
+flet   = { extras = ["all"], version = "0.28.3" }
+nfcflet = { path = "..\\..\\", develop = true }
