@@ -1,24 +1,19 @@
-from typing import Any, Callable, Optional
-from flet.core.constrained_control import ConstrainedControl
+# src/nfcflet/__init__.py
 
-class NFCControl(ConstrainedControl):
-    def __init__(
-        self,
-        on_response: Optional[Callable] = None,
-    ):
-        super().__init__()
-        self.on_response = on_response
+from flet import Control
 
-    def call_flutter(self, payload: Any):
-        self._set_attr("request_payload", payload)
+class Nfcflet(Control):
 
-    @property
-    def on_response(self) -> Optional[Callable]:
-        return self._get_event_handler("response")
-
-    @on_response.setter
-    def on_response(self, handler: Callable):
-        self._add_event_handler("response", handler)
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
     def _get_control_name(self) -> str:
         return "nfcflet"
+
+    async def read_nfc(self) -> str:
+        return await self.invoke_method_async("readNFC")
+
+    async def write_nfc(self, data: str) -> str:
+        return await self.invoke_method_async("writeNFC", [data])
+
+__all__ = ["Nfcflet"]

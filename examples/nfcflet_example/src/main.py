@@ -1,31 +1,33 @@
-import flet as ft
+import flet
+from flet import app, Page, Text, ElevatedButton
+from nfcflet import Nfcflet
 
-from nfcflet import NFCControl
+def main(page: Page):
+    page.title = "NFC Flet Demo"
 
-def main(page: ft.Page):
-    page.title = "Teste  de leitura NFC"
+    # 1) Create your NFC control
+    nfc = Nfcflet()
 
-    nfc = NFCControl()
+    # 2) Add it to the page before calling any methods
+    page.add(nfc)
 
-    def handle_nfc_response(event):
-        tag_id = event.data.get("id", "desconhecido")
-        text.value = f"ID da tag: {tag_id}"
+    # 3) Wire up a button to scan/write NFC
+    def on_scan(e):
+        tag = nfc.read_nfc()
+        page.add(Text(f"NFC Tag: {tag}"))
         page.update()
 
-    text = ft.Text("tag id: -")
-
-    btn = ft.ElevatedButton(
-        "Escanear NFC",
-        on_click=lambda e: nfc.call_flutter({})
-    )
-
-
-    nfc.on_response = handle_nfc_response
+    def on_write(e):
+        res = nfc.write_nfc("Hello NFC")
+        page.add(Text(f"Write result: {res}"))
+        page.update()
 
     page.add(
-        text,
-        btn
+        ElevatedButton("Scan NFC", on_click=on_scan),
+        ElevatedButton("Write NFC", on_click=on_write),
     )
 
+    page.update()
 
-ft.app(main)
+if __name__ == "__main__":
+    app(target=main)

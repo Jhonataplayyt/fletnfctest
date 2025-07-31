@@ -11,12 +11,6 @@ dependencies = [
     "flet>=0.28.3",
 ]
 
-[project.urls]
-Homepage = "https://mydomain.dev"
-Documentation = "https://github.com/MyGithubAccount/nfcflet"
-Repository = "https://github.com/MyGithubAccount/nfcflet"
-Issues = "https://github.com/MyGithubAccount/nfcflet/issues"
-
 [tool.setuptools.package-data]
 "flutter.nfcflet" = ["**/*"]
 

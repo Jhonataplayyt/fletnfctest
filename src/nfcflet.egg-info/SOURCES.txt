@@ -9,7 +9,6 @@ src/flutter/nfcflet/lib/nfcflet.dart
 src/flutter/nfcflet/lib/src/create_control.dart
 src/flutter/nfcflet/lib/src/nfcflet.dart
 src/nfcflet/__init__.py
-src/nfcflet/nfcflet.py
 src/nfcflet.egg-info/PKG-INFO
 src/nfcflet.egg-info/SOURCES.txt
 src/nfcflet.egg-info/dependency_links.txt

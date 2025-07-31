@@ -15,4 +15,5 @@ CreateControlFactory createControl = (CreateControlArgs args) {
 };
 
 void ensureInitialized() {
+  // nothing to initialize
 }

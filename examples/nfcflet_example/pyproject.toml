@@ -1,10 +1,11 @@
 [project]
-name = "fletnfc-app"
+name = "nfcflet-example"
 version = "1.0.0"
-description = "teste com nfc"
+description = ""
+readme = "README.md"
 requires-python = ">=3.9"
 authors = [
-  { name = "Jhonata", email = "jhonatacarneirorios@gmail.com" }
+    { name = "Flet developer", email = "you@example.com" }
 ]
 dependencies = [
   "nfcflet",
@@ -12,42 +13,34 @@ dependencies = [
 ]
 
 [tool.flet]
-# pacote org + nome formam o bundle ID padrão (Android/iOS)
-org     = "com.jh.NFCTest"
-# nome do app mostrado no celular
-product = "NFCTest"
+# org name in reverse domain name notation, e.g. "com.mycompany".
+# Combined with project.name to build bundle ID for iOS and Android apps
+org = "com.mycompany"
+
+# project display name that is used as an app title on Android and iOS home screens,
+# shown in window titles and about app dialogs on desktop.
+product = "nfcflet-example"
+
+# company name to display in about app dialogs
+company = "Flet"
+
+# copyright text to display in about app dialogs
+copyright = "Copyright (C) 2025 by MyCompany"
 
 [tool.flet.app]
 path = "src"
 
 [tool.flet.dev_packages]
-nfcflet = "..\\.."
-
-[tool.flet.android]
-# bundle ID Android/iOS
-bundle_id     = "com.jh.NFCTest"
-# gera APKs separados por ABI
-split_per_abi = true
-
-[tool.flet.android.permission]
-"android.permission.INTERNET" = true
-"android.permission.NFC"      = true
-
-[tool.flet.android.feature]
-"android.hardware.nfc" = true
-
-[tool.flet.android.manifest_application]
-# label que vai para AndroidManifest.xml como android:label
-label = "NFCTest"
+nfcflet = "../.." # relative path
 
 [tool.uv]
 dev-dependencies = [
-  "flet[all]==0.28.3",
+    "flet[all]==0.28.3",
 ]
 
 [tool.uv.sources]
-nfcflet = { path = "..\\..\\", editable = true }
+nfcflet = { path = "../../", editable = true }
 
 [tool.poetry.group.dev.dependencies]
-flet   = { extras = ["all"], version = "0.28.3" }
-nfcflet = { path = "..\\..\\", develop = true }
+flet = {extras = ["all"], version = "0.28.3"}
+nfcflet = {path = "../../", develop = true}

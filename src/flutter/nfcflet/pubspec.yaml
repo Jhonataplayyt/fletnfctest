@@ -1,23 +1,20 @@
 name: nfcflet
 description: Flet Nfcflet control
+repository: https://github.com/MyGithubAccount/nfcflet/src/flutter/nfcflet
 version: 0.1.0
+homepage: https://github.com/MyGithubAccount/nfcflet
 
 environment:
   sdk: '>=3.3.0 <4.0.0'
-  flutter: '>=1.17.0'
+  flutter: ">=1.17.0"
 
 dependencies:
+  flet: 0.28.3
   flutter:
     sdk: flutter
-
-  # Se você estiver usando Flet em conjunto:
-  flet: ^0.28.3
-
-  # NFC
-  flutter_nfc_kit: ^3.6.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^6.0.0
-  lints: ^6.0.0
+  flutter_lints: ^3.0.0
+  
