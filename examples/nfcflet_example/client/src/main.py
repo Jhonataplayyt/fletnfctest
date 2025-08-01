@@ -14,7 +14,4 @@ def main(page: ft.Page):
     # nfc.text = "ID da tag: 04A224B1C2"
     # page.update()  # opcional, mas nfc.update() já envia só o evento de extensão
 
-ft.app(
-    target=main,
-    assets_dir="client",
-)
+ft.app(target=main)

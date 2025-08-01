@@ -5,6 +5,7 @@ src/flutter/nfcflet/LICENSE
 src/flutter/nfcflet/README.md
 src/flutter/nfcflet/pubspec.lock
 src/flutter/nfcflet/pubspec.yaml
+src/flutter/nfcflet/lib/main.dart
 src/flutter/nfcflet/lib/nfcflet.dart
 src/flutter/nfcflet/lib/src/create_control.dart
 src/flutter/nfcflet/lib/src/nfcflet.dart
