@@ -1,15 +1,19 @@
-// lib/src/create_control.dart
+import 'package:flet/flet.dart';
 
-import 'package:flutter/widgets.dart';
-import 'package:flet/src/control_factory.dart';
-import 'package:flet/flet.dart';            // <-- para usar o ensureInitialized “de verdade”
-import 'nfcflet_control.dart';
+import 'nfcflet.dart';
 
-Widget? createControl(CreateControlArgs args) {
-  final control = args.control;
-  final parent  = args.parent;
-  if (control.type == 'nfcflet') {
-    return NfcfletControl(parent: parent, control: control);
+CreateControlFactory createControl = (CreateControlArgs args) {
+  switch (args.control.type) {
+    case "nfcflet":
+      return NfcfletControl(
+        parent: args.parent,
+        control: args.control,
+      );
+    default:
+      return null;
   }
-  return null;
+};
+
+void ensureInitialized() {
+  // nothing to initialize
 }

@@ -4,11 +4,7 @@ from nfcflet import Nfcflet
 def main(page: ft.Page):
     # instância com texto inicial
     nfc = Nfcflet(text="Escaneie uma tag NFC!")
-    page.add(
-        ft.Column([
-            nfc
-        ])
-    )
+    print(nfc.readNFC())
 
     # em algum callback de leitura NFC:
     # nfc.text = "ID da tag: 04A224B1C2"

@@ -6,23 +6,25 @@ class NfcfletControl extends StatelessWidget {
   final Control control;
 
   const NfcfletControl({
-    Key? key,
+    super.key,
     required this.parent,
     required this.control,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    // Puxa o valor atual de 'text' do lado Python
-    final text = control.attrString('text') ?? '';
+    String text = control.attrString("text", "")!;
+    String x = control.attrString("x", "")!;
+    late final Widget content;
 
-    // Cria o widget de texto
-    final content = Text(
-      text,
-      style: const TextStyle(fontSize: 16),
-    );
+    if (text == "readNFC") {
+      content = Text(text);
+    } else if (text == "writeNFC") {
+      content = Text(x);
+    } else {
+      return const SizedBox.shrink();
+    }
 
-    // Envolve no constrainedControl para posicionamento e eventos
     return constrainedControl(
       context,
       content,
