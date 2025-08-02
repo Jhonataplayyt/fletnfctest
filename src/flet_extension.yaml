@@ -1,0 +1,4 @@
+name: nfcflet
+version: "0.1.0"
+flutter_dir: flutter
+python_dir: python
