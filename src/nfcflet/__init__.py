@@ -14,6 +14,9 @@ class Nfcflet(ConstrainedControl):
         top: OptionalNumber = None, 
         right: OptionalNumber = None, 
         bottom: OptionalNumber = None, 
+
+        text: "ReadNFC"
+        x=''
     ):
         ConstrainedControl.__init__( 
             self, 
@@ -42,20 +45,6 @@ class Nfcflet(ConstrainedControl):
     def x(self) -> Optional[str]:
         return self._get_attr("x")
 
-    @text.setter
+    @x.setter
     def x(self, value: str):
         self._set_attr("text", value)
-    
-    @property
-    @text.setter
-    def readNFC():
-        self._set_attr("text", "readNFC")
-        self._set_attr("x", '')
-
-        return self._get_attr("text")
-    
-    def writeNFC(x):
-        self._set_attr("text", "writeNFC")
-        self._set_attr("x", x)
-
-        return self._get_attr("text")
