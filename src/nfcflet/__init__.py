@@ -15,8 +15,8 @@ class Nfcflet(ConstrainedControl):
         right: OptionalNumber = None, 
         bottom: OptionalNumber = None, 
 
-        text: "ReadNFC"
-        x=''
+        text: str="ReadNFC",
+        x='',
     ):
         ConstrainedControl.__init__( 
             self, 
@@ -29,6 +29,9 @@ class Nfcflet(ConstrainedControl):
             right=right, 
             bottom=bottom, 
         ) 
+
+        self.text = text
+        sself.x = x
     
     def _get_control_name(self): 
         return "nfcflet"
