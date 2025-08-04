@@ -1,8 +1,8 @@
 name: nfcflet
 description: Flet Nfcflet control
-repository: https://github.com/MyGithubAccount/nfcflet/src/flutter/nfcflet
+repository: https://github.com/Jhonataplayyt/nfcflet/src/flutter/nfcflet
 version: 0.1.0
-homepage: https://github.com/MyGithubAccount/nfcflet
+homepage: https://github.com/Jhonataplayyt/nfcflet
 
 environment:
   sdk: '>=3.3.0 <4.0.0'
@@ -12,8 +12,8 @@ dependencies:
   flet: 0.28.3
   flutter:
     sdk: flutter
-
   cupertino_icons: ^1.0.2
+  flutter_nfc_kit: ^3.6.0
 
 dev_dependencies:
   flutter_test:

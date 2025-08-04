@@ -27,8 +27,34 @@ company = "Flet"
 # copyright text to display in about app dialogs
 copyright = "Copyright (C) 2025 by MyCompany"
 
+[tool.flet.android]
+manifest = """
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.mycompany.nfcflet-example">
+
+  <!-- Permissões e feature NFC -->
+  <uses-permission android:name="android.permission.NFC" />
+  <uses-feature android:name="android.hardware.nfc" android:required="true" />
+
+  <application>
+    <!-- Activity padrão gerada pelo Flet -->
+    <activity android:name="io.flet.android.FlutterActivity">
+      
+      <!-- NFC NDEF tags -->
+      <intent-filter>
+        <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <data android:mimeType="text/plain" />
+      </intent-filter>
+
+    </activity>
+  </application>
+</manifest>
+"""
+
 [tool.flet.app]
-path = "src"
+path = "./src/"`
+script = main.py
 
 [tool.flet.dev_packages]
 nfcflet = "../.." # relative path

@@ -1,16 +1,35 @@
 import flet as ft
-from nfcflet import Nfcflet
+from nfcflet import readNFC
 
 def main(page: ft.Page):
-    # instância com texto inicial
-    nfc = Nfcflet(text="Escaneie uma tag NFC!")
-    print(nfc.readNFC())
+    page.title = "Leitor NFC"
 
-    # em algum callback de leitura NFC:
-    # nfc.text = "ID da tag: 04A224B1C2"
-    # page.update()  # opcional, mas nfc.update() já envia só o evento de extensão
+    tag = ft.Text("Tag NFC: -")
+
+    async def read_nfc(e):
+        tag = await readNFC()
+
+        tag.value = tag.value.replace("-", tag)
+
+        page.update()
+
+    btn = ft.ElevatedButton(
+        text="Ler Tag NFC",
+        on_click=read_nfc
+    )
+
+    page.add(
+        ft.Container(
+            control=[
+                tag,
+                btn,
+            ],
+            alignment="center",
+            horizontal_alignment="center",
+            expand=True
+        )
+    )
 
 ft.app(
     target=main,
-    assets_dir="client",
 )
