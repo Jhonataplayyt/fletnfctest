@@ -3,6 +3,7 @@ from typing import Any, Optional
 from flet.core.constrained_control import ConstrainedControl 
 from flet.core.control import OptionalNumber 
 from flet.core.types import ColorEnums, ColorValue 
+
 class Nfcflet(ConstrainedControl): 
     def __init__( self, # # Control # 
         opacity: OptionalNumber = None, 

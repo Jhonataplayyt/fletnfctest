@@ -53,7 +53,7 @@ manifest = """
 """
 
 [tool.flet.app]
-path = "./src/"`
+path = "./src/"
 script = main.py
 
 [tool.flet.dev_packages]

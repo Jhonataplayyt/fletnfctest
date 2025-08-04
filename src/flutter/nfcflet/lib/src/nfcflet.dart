@@ -63,7 +63,9 @@ import 'dart:typed_data';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flet/flet.dart';
-import 'package:flutter_nfc_kit/flutter_nfc_kit.dart';
+import 'package:flutter_nfc_kit/flutter_nfc_kit.dart'
+import 'package:nfc_manager/nfc_manager.dart';
+import 'dart:async';
 
 class NfcfletControl extends StatelessWidget {
   final Control? parent;
@@ -145,11 +147,11 @@ class NfcfletControl extends StatelessWidget {
 
     if (text == "readNFC") {
       return FutureBuilder<String>(
-        future: _readNfc(),
+        future: readNfc(),
         builder: (ctx, snap) {
           Widget content;
 
-          if (snap.data!) {
+          if (snap.hasData) {
             content = Text('${snap.data!}');
           } else {
             content = Text('Error on NFC read.');
@@ -159,12 +161,12 @@ class NfcfletControl extends StatelessWidget {
         },
       );
     } else if (text == "writeNFC") {
-      return FutureBuilder<Bool>(
-        future: _writeNfc(x),
+      return FutureBuilder<bool>(
+        future: writeNfc(x),
         builder: (ctx, snap) {
           Widget content;
 
-          if (snap.data!) {
+          if (snap.hasData) {
             content = Text("Success NFC write.");
           } else {
             content = Text("Error on NFC write.");
