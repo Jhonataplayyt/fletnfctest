@@ -6,10 +6,10 @@ def main(page: ft.Page):
 
     tag = ft.Text("Tag NFC: -")
 
-    async def read_nfc(e):
-        tag = await readNFC()
+    def read_nfc(e):
+        tag_nfc = readNFC(page)
 
-        tag.value = tag.value.replace("-", tag)
+        tag.value = tag_nfc
 
         page.update()
 
@@ -19,8 +19,8 @@ def main(page: ft.Page):
     )
 
     page.add(
-        ft.Container(
-            control=[
+        ft.Column(
+            controls=[
                 tag,
                 btn,
             ],

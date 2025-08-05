@@ -1,11 +1,19 @@
 from enum import Enum 
-from typing import Any, Optional 
+from typing import Any, Optional, Callable
 from flet.core.constrained_control import ConstrainedControl 
 from flet.core.control import OptionalNumber 
 from flet.core.types import ColorEnums, ColorValue 
+import flet as ft
+import asyncio
 
 class Nfcflet(ConstrainedControl): 
-    def __init__( self, # # Control # 
+    def __init__(
+        self,
+        text: str = "readNFC",
+        x: str = "",
+        on_result: Optional[Callable[[ft.ControlEvent], None]] = None,     
+
+        # # Control # 
         opacity: OptionalNumber = None, 
         tooltip: Optional[str] = None, 
         visible: Optional[bool] = None, 
@@ -15,9 +23,6 @@ class Nfcflet(ConstrainedControl):
         top: OptionalNumber = None, 
         right: OptionalNumber = None, 
         bottom: OptionalNumber = None, 
-
-        text: str="readNFC",
-        x='',
     ):
         ConstrainedControl.__init__( 
             self, 
@@ -33,6 +38,8 @@ class Nfcflet(ConstrainedControl):
 
         self.text = text
         self.x = x
+
+        self.on_event = on_result
     
     def _get_control_name(self): 
         return "nfcflet"
@@ -52,10 +59,42 @@ class Nfcflet(ConstrainedControl):
     @x.setter
     def x(self, value: str):
         self._set_attr("x", value)
+    
+    @property
+    def value(self) -> Optional[str]:
+        return self._get_attr("value")
+    
+    @value.setter
+    def value(self, value: str):
+        self._set_attr("value", value)
 
+def readNFC() -> str:
+    text = ft.Text("")
 
-async def readNFC():
-    return await Nfcflet().value
+    def _on_nfc(e: ft.ControlEvent, result: ft.Text):
+        result.value = e.control.attrs.get("value", "without data")
+        e.page.update()
 
-async def writeNFC(x: Any):
-    await Nfcflet(text="writeNFC", x=x)
+    nfc = Nfcflet(
+        text="readNFC",
+        x="",
+        on_result=lambda e: _on_nfc(e, text),
+    )
+
+    return text.value
+
+def writeNFC(x: Any):
+    text = ft.Text("")
+
+    def _on_nfc(e: ft.ControlEvent, result: ft.Text):
+        result.value = e.control.attrs.get("value", "without data")
+
+        e.page.update()
+
+    Nfcflet(
+        text="writeNFC",
+        x=x,
+        on_result=lambda e: _on_nfc(e, text)
+    )
+
+    return text.value

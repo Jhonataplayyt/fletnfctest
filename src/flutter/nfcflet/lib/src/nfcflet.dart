@@ -59,124 +59,149 @@
 //   }
 // }
 
-import 'dart:typed_data';
-import 'dart:convert';
-import 'package:flutter/material.dart';
-import 'package:flet/flet.dart';
-import 'package:flutter_nfc_kit/flutter_nfc_kit.dart'
-import 'package:nfc_manager/nfc_manager.dart';
-import 'dart:async';
+// lib/src/nfcflet.dart
 
+import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:nfc_manager/nfc_manager.dart';
+import 'package:flet/flet.dart';
+
+/// Um Control Flet para ler e escrever em tags NFC.
+/// Dispara eventos "nfc-result" com payload {"value": String} ou {"error": String}.
 class NfcfletControl extends StatelessWidget {
   final Control? parent;
   final Control control;
+  static bool _isProcessing = false;
 
   const NfcfletControl({
-    super.key,
+    Key? key,
     required this.parent,
     required this.control,
-  });
+  }) : super(key: key);
 
-  Future<String> readTag() {
+  /// Inicia sessão NFC para leitura, completa com o texto lido ou erro.
+  Future<String> readTag({Duration timeout = const Duration(seconds: 20)}) {
     final completer = Completer<String>();
+    // timeout
+    Timer(timeout, () {
+      if (!completer.isCompleted) {
+        completer.completeError('Timeout on NFC read');
+        NfcManager.instance.stopSession(errorMessage: 'Timeout NFC');
+      }
+    });
 
     NfcManager.instance.startSession(
-      onDiscovered: (NfcTag tag) {
-        final ndef = Ndef.from(tag);
-        if (ndef == null || ndef.cachedMessage == null) {
-          completer.completeError('Tag não formatada');
-          NfcManager.instance.stopSession(errorMessage: 'NDEF esperado');
-          return;
+      onDiscovered: (tag) async {
+        try {
+          final ndef = Ndef.from(tag);
+          if (ndef == null || ndef.cachedMessage == null) {
+            throw 'Tag not formatted';
+          }
+          final record = ndef.cachedMessage!.records.first;
+          final payload = record.payload.sublist(3);
+          final text = String.fromCharCodes(payload);
+          completer.complete(text);
+        } catch (e) {
+          completer.completeError(e);
+        } finally {
+          await NfcManager.instance.stopSession();
         }
-        final record = ndef.cachedMessage!.records.first;
-      // payload[0–2] = status + language code (per NDEF spec)
-        final raw = record.payload;
-        final text = String.fromCharCodes(raw.sublist(3));
-        completer.complete(text);
-        NfcManager.instance.stopSession();
       },
-      onError: (e) {
-        completer.completeError(e);
+      onError: (error) async {
+        if (!completer.isCompleted) {
+          completer.completeError(error);
+        }
+        await NfcManager.instance.stopSession(errorMessage: error.toString());
       },
     );
 
     return completer.future;
   }
 
-  Future<bool> writeTag(String text) async {
-    if (!await NfcManager.instance.isAvailable()) return false;
-
-    final message = NdefMessage([
-      NdefRecord.createText(text)
-    ]);
+  /// Inicia sessão NFC para escrita, completa com true ou erro.
+  Future<bool> writeTag(
+    String text, {
+    Duration timeout = const Duration(seconds: 20),
+  }) async {
+    if (!await NfcManager.instance.isAvailable()) {
+      throw 'NFC not available';
+    }
 
     final completer = Completer<bool>();
+    // timeout
+    Timer(timeout, () {
+      if (!completer.isCompleted) {
+        completer.completeError('Timeout on NFC write');
+        NfcManager.instance.stopSession(errorMessage: 'Timeout NFC');
+      }
+    });
+
+    final message = NdefMessage([NdefRecord.createText(text)]);
 
     NfcManager.instance.startSession(
-      onDiscovered: (NfcTag tag) async {
-        final ndef = Ndef.from(tag);
-        if (ndef == null || !ndef.isWritable) {
-          completer.complete(false);
-          NfcManager.instance.stopSession(errorMessage: 'Error');
-          return;
-        }
+      onDiscovered: (tag) async {
         try {
+          final ndef = Ndef.from(tag);
+          if (ndef == null || !ndef.isWritable) {
+            throw 'Cannot write to tag';
+          }
           await ndef.write(message);
           completer.complete(true);
-          NfcManager.instance.stopSession(alertMessage: 'Tag writed with success.');
         } catch (e) {
-          completer.complete(false);
-          NfcManager.instance.stopSession(errorMessage: e.toString());
+          completer.completeError(e);
+        } finally {
+          await NfcManager.instance.stopSession();
         }
       },
-      onError: (error) {
+      onError: (error) async {
         if (!completer.isCompleted) {
-          completer.complete(false);
+          completer.completeError(error);
         }
+        await NfcManager.instance.stopSession(errorMessage: error.toString());
       },
     );
 
     return completer.future;
   }
 
+  /// Dispara evento Flet "nfc-result" para o frontend Python/JS
+  void _dispatchResult(Map<String, dynamic> payload) {
+    dispatchControlEvent(control, "nfc-result", payload);
+  }
 
   @override
   Widget build(BuildContext context) {
-    final text = control.attrString("text", "")!;
-    final x = control.attrString("x", "")!;
+    final cmd = control.attrString("text", "")!;
+    final value = control.attrString("x", "")!;
 
-    if (text == "readNFC") {
-      return FutureBuilder<String>(
-        future: readNfc(),
-        builder: (ctx, snap) {
-          Widget content;
+    // Executa apenas uma vez por comando
+    if (!_isProcessing && cmd.isNotEmpty) {
+      _isProcessing = true;
 
-          if (snap.hasData) {
-            content = Text('${snap.data!}');
-          } else {
-            content = Text('Error on NFC read.');
-          }
-
-          return constrainedControl(context, content, parent, control);
-        },
-      );
-    } else if (text == "writeNFC") {
-      return FutureBuilder<bool>(
-        future: writeNfc(x),
-        builder: (ctx, snap) {
-          Widget content;
-
-          if (snap.hasData) {
-            content = Text("Success NFC write.");
-          } else {
-            content = Text("Error on NFC write.");
-          }
-
-          return constrainedControl(context, content, parent, control);
-        },
-      );
-    } else {
-      return const SizedBox.shrink();
+      if (cmd == "read") {
+        readTag().then((tag) {
+          _dispatchResult({"value": tag});
+        }).catchError((e) {
+          _dispatchResult({"error": e.toString()});
+        }).whenComplete(() {
+          _isProcessing = false;
+        });
+      } else if (cmd == "write") {
+        writeTag(value).then((_) {
+          _dispatchResult({"value": value});
+        }).catchError((e) {
+          _dispatchResult({"error": e.toString()});
+        }).whenComplete(() {
+          _isProcessing = false;
+        });
+      } else {
+        // comando desconhecido
+        _dispatchResult({"error": "Unknown command: $cmd"});
+        _isProcessing = false;
+      }
     }
+
+    // Retorna um container vazio pois toda a interação é via evento
+    return const SizedBox.shrink();
   }
 }

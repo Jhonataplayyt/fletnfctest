@@ -54,7 +54,7 @@ manifest = """
 
 [tool.flet.app]
 path = "./src/"
-script = main.py
+script = "main.py"
 
 [tool.flet.dev_packages]
 nfcflet = "../.." # relative path
