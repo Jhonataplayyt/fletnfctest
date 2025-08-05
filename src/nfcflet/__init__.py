@@ -11,7 +11,6 @@ class Nfcflet(ConstrainedControl):
         self,
         text: str = "readNFC",
         x: str = "",
-        on_result: Optional[Callable[[ft.ControlEvent], None]] = None,     
 
         # # Control # 
         opacity: OptionalNumber = None, 
@@ -39,7 +38,7 @@ class Nfcflet(ConstrainedControl):
         self.text = text
         self.x = x
 
-        self.on_event = on_result
+        self.value = self.attrs["value"]
     
     def _get_control_name(self): 
         return "nfcflet"
@@ -69,32 +68,17 @@ class Nfcflet(ConstrainedControl):
         self._set_attr("value", value)
 
 def readNFC() -> str:
-    text = ft.Text("")
-
-    def _on_nfc(e: ft.ControlEvent, result: ft.Text):
-        result.value = e.control.attrs.get("value", "without data")
-        e.page.update()
-
     nfc = Nfcflet(
         text="readNFC",
         x="",
-        on_result=lambda e: _on_nfc(e, text),
     )
 
-    return text.value
+    return nfc.value
 
 def writeNFC(x: Any):
-    text = ft.Text("")
-
-    def _on_nfc(e: ft.ControlEvent, result: ft.Text):
-        result.value = e.control.attrs.get("value", "without data")
-
-        e.page.update()
-
-    Nfcflet(
+    nfc = Nfcflet(
         text="writeNFC",
         x=x,
-        on_result=lambda e: _on_nfc(e, text)
     )
 
-    return text.value
+    return nfc.value
